@@ -1,21 +1,21 @@
 package bean;
 
 public class Admin{
-	private String adminID, username, password;
+	private String adminId, username, password;
 
-	public Admin(String adminID, String username, String password) {
+	public Admin(String adminId, String username, String password) {
 		super();
-		this.adminID = adminID;
+		this.adminId = adminId;
 		this.username = username;
 		this.password = password;
 	}
 
-	public String getAdminID() {
-		return adminID;
+	public String getAdminId() {
+		return adminId;
 	}
 
-	public void setAdminID(String adminID) {
-		this.adminID = adminID;
+	public void setAdminID(String adminId) {
+		this.adminId = adminId;
 	}
 
 	public String getUsername() {
@@ -36,7 +36,7 @@ public class Admin{
 
 	@Override
 	public String toString() {
-		return "Admin [adminID=" + adminID + ", username=" + username + ", password=" + password + "]";
+		return "Admin [adminId=" + adminId + ", username=" + username + ", password=" + password + "]";
 	}
 		
 	

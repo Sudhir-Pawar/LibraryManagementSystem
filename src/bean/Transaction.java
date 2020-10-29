@@ -1,13 +1,13 @@
 package bean;
 
 public class Transaction{
-	private String bookId, userID, issueDate, returnDate;
+	private String bookId, userId, issueDate, returnDate;
 	int fine;
 	
-	public Transaction(String bookId, String userID, String issueDate, String returnDate, int fine) {
+	public Transaction(String bookId, String userId, String issueDate, String returnDate, int fine) {
 		super();
 		this.bookId = bookId;
-		this.userID = userID;
+		this.userId = userId;
 		this.issueDate = issueDate;
 		this.returnDate = returnDate;
 		this.fine = fine;
@@ -22,12 +22,12 @@ public class Transaction{
 		this.bookId = bookId;
 	}
 
-	public String getUserID() {
-		return userID;
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setUserID(String userID) {
-		this.userID = userID;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	public String getIssueDate() {
@@ -56,7 +56,7 @@ public class Transaction{
 	
 	@Override
 	public String toString() {
-		return "Transaction [bookId=" + bookId + ", userID=" + userID + ", issueDate=" + issueDate + ", returnDate="
+		return "Transaction [bookId=" + bookId + ", userId=" + userId + ", issueDate=" + issueDate + ", returnDate="
 				+ returnDate + ", fine=" + fine + "]";
 	}
 }

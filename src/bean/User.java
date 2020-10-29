@@ -64,7 +64,7 @@ public class User {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "["+userId+" "+userName+" "+department+" "+year+" "+division+" "+contactNo+"]";
+		return "User [userId="+userId+" userName="+userName+" department="+department+" year="+year+" division="+division+" contactNo="+contactNo+"]";
 	}
 	
 }

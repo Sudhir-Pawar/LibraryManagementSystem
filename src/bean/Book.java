@@ -3,9 +3,9 @@ package bean;
 public class Book {
 	private String bookId,bookName,authorName;
 
-	public Book(String bookID, String bookName, String authorName) {
+	public Book(String bookId, String bookName, String authorName) {
 		super();
-		this.bookId = bookID;
+		this.bookId = bookId;
 		this.bookName = bookName;
 		this.authorName = authorName;
 	}
@@ -37,7 +37,7 @@ public class Book {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "[" + bookId+" "+ bookName+" "+authorName+"]";
+		return "Book [bookId=" + bookId+" bookName="+ bookName+" authorName="+authorName+"]";
 	}
 	
 	
