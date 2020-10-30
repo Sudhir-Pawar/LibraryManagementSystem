@@ -8,10 +8,10 @@ import java.sql.SQLException;
 import bean.Book;
 import connection.DatabaseConnection;
 
-public class BookDao implements BookInterface<Boolean,Book>{
+public class DaoClass implements DaoInterface<Boolean,Book>{
 	Connection connection = null;
 	@Override
-	public Boolean insert(Book book) {
+	public Boolean insertBook(Book book) {
 		Boolean status = false;
 		try {
 			connection = DatabaseConnection.getConnection();
@@ -39,7 +39,7 @@ public class BookDao implements BookInterface<Boolean,Book>{
 	}
 
 	@Override
-	public Boolean remove(Book book) {
+	public Boolean removeBook(Book book) {
 		Boolean status = false;
 		try {
 			connection = DatabaseConnection.getConnection();
