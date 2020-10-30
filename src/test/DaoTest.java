@@ -7,9 +7,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import bean.Book;
-import dao.BookDao;
+import dao.DaoClass;
 
-public class BookDaoTest {
+public class DaoTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -22,7 +22,7 @@ public class BookDaoTest {
 	@Test
 	public void test() {
 //		assertEquals(true,new BookDao().insert(new Book("BK0007","An Autobiography","Jawaharlal Nehru")));
-		assertEquals(false,new BookDao().insert(new Book("BK0007","An Autobiography","Jawaharlal Nehru")));
+		assertEquals(false,new DaoClass().insertBook(new Book("BK0007","An Autobiography","Jawaharlal Nehru")));
 	}
 
 }
