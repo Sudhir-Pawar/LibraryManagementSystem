@@ -1,4 +1,4 @@
-package Dao;
+package dao;
 
 import bean.Admin;
 import bean.Book;
