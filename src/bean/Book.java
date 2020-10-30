@@ -3,6 +3,12 @@ package bean;
 public class Book {
 	private String bookId,bookName,authorName;
 
+	
+	public Book(String bookId) {
+		super();
+		this.bookId = bookId;
+	}
+
 	public Book(String bookId, String bookName, String authorName) {
 		super();
 		this.bookId = bookId;
