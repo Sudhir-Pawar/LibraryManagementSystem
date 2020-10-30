@@ -15,10 +15,13 @@ public class BookDao implements BookInterface<Boolean,Book>{
 		Boolean status = false;
 		try {
 			connection = DatabaseConnection.getConnection();
+			System.out.println(connection.toString());
 			PreparedStatement preparedStatement = connection.prepareStatement("select * from book where book_id = ?");
+			preparedStatement.setString(1,book.getBookId());
 			ResultSet resultSet = preparedStatement.executeQuery();
+			System.out.println(resultSet);
 			if(!resultSet.isBeforeFirst()){
-				preparedStatement = connection.prepareStatement("insert into Book values(?,?,?);");
+				preparedStatement = connection.prepareStatement("insert into Book values(?,?,?)");
 				preparedStatement.setString(1,book.getBookId());
 				preparedStatement.setString(2,book.getBookName());
 				preparedStatement.setString(3,book.getAuthorName());
