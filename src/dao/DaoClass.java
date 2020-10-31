@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -151,8 +152,39 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 	}
 
 	@Override
-	public Boolean returnBook(Transaction r) {
-		return null;
+	public Boolean returnBook(Transaction transaction) {
+		Boolean status = false;
+		connection = DatabaseConnection.getConnection();
+		PreparedStatement preparedStatement;
+		int dateDiff;
+		try {			
+			if(isPresent("Book_id", transaction.getBookId(),"Book")){
+				
+				if(isPresent("User_id", transaction.getUserId(), "Users")){
+					
+					if(!isPresent("Book_id",transaction.getBookId(), "TRANSACTION")){
+						preparedStatement = connection.prepareStatement("insert into TRANSACTION(BOOK_ID,USER_ID,return_date) VALUES(?,?,TO_DATE(?,'YYYY-MM-DD'))");
+						preparedStatement.setString(1,transaction.getBookId());
+						preparedStatement.setString(2, transaction.getUserId());
+						preparedStatement.setString(3,transaction.getReturnDate());
+						int count  = preparedStatement.executeUpdate();
+						if(count >0){
+							status = true;
+						}	
+					} else {
+						// Raise Exception Book_id already present in Transaction table or Book already returned.
+					}
+				} else {
+					//Raise Exception User_id Not present in User Table
+				}
+			} else {
+				//Raise Exception Book_id Not present in Book Table
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return status;
+		
 	}
 
 	@Override
@@ -197,4 +229,5 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 		}
 		return false;
 	}
+
 }
