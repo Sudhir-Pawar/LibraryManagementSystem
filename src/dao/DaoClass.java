@@ -116,13 +116,6 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 		return status;
 	}
 
-	
-	@Override
-	public ArrayList<Book> viewAllBooks(User user) {
-		
-		return null;
-	}
-
 	@Override
 	public Boolean issueBook(Transaction transaction) {
 		Boolean status = false;
@@ -164,7 +157,36 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 
 	@Override
 	public ArrayList<Book> viewAllBooks() {
-		return null;
+		connection = DatabaseConnection.getConnection();
+		ArrayList<Book> books = new ArrayList<>();
+		try {
+			ResultSet resultSet = connection.prepareStatement("select * from book").executeQuery();
+				while(resultSet.next()){
+					books.add(new Book(resultSet.getString(1),resultSet.getString(2),resultSet.getString(3)));
+				}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println(books);
+		return books;
+	}
+	@Override
+	public ArrayList<Book> viewAllBooks(User user) {
+		connection = DatabaseConnection.getConnection();
+		ArrayList<Book> books = new ArrayList<>();
+		
+		try {
+			PreparedStatement preparedStatement =  connection.prepareStatement("select * from book where book_id in(select book_id from transaction where user_id = ?)");
+			preparedStatement.setString(1, user.getUserId());
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while(resultSet.next()){
+				books.add(new Book(resultSet.getString(1),resultSet.getString(2),resultSet.getString(3)));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println(books);
+		return books;
 	}
 	private Boolean isPresent(String fieldName,String fieldValue,String tableName) throws SQLException{
 		connection = DatabaseConnection.getConnection();
