@@ -136,7 +136,7 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 							status = true;
 						}	
 					} else {
-						// Raise Exception Book_id already present in Transaction table
+						// Raise Exception Book_id already present in Transaction table or Book already issued
 					}
 				} else {
 					//Raise Exception USer_id Not present in USer Table
