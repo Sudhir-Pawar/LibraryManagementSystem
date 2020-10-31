@@ -4,6 +4,16 @@ public class Transaction{
 	private String bookId, userId, issueDate, returnDate;
 	int fine;
 	
+	
+	
+	public Transaction(String bookId, String userId, String issueDate) {
+		super();
+		this.bookId = bookId;
+		this.userId = userId;
+		this.issueDate = issueDate;
+	}
+
+
 	public Transaction(String bookId, String userId, String issueDate, String returnDate, int fine) {
 		super();
 		this.bookId = bookId;

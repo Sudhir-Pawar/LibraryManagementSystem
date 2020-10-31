@@ -10,5 +10,6 @@ public interface DaoInterface <T,P,S,R>{
 	T issueBook(R r);
 	T returnBook(R r);
 	//ArrayList<T> pendingReturn();
-	ArrayList<T> viewAllBooks();
+	ArrayList<P> viewAllBooks(S s);
+	ArrayList<P> viewAllBooks();
 }

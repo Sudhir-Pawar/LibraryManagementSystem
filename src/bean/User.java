@@ -3,6 +3,12 @@ package bean;
 public class User {
 	private String userId, userName, department,year,division,contactNo;
 
+	
+	public User(String userId) {
+		super();
+		this.userId = userId;
+	}
+
 	public User(String userId, String userName, String department, String year, String division, String contactNo) {
 		super();
 		this.userId = userId;
