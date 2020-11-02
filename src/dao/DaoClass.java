@@ -191,16 +191,17 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 						Date returndate = format.parse(transaction.getReturnDate());
 						int daydiff = (int) ((returndate.getTime() - issuedate.getTime()) / (1000 * 60 * 60 * 24));	
 						int fine;
-						if(daydiff <= 0) {
+						if(daydiff <= 30) {
 							 fine = 0;
 						} else {
 							fine = (daydiff-30)*2;
 						}
 						String s = String.valueOf(daydiff);
-						preparedStatement2 = connection.prepareStatement("Update TRANSACTION set fine = ? where book_id = ? and user_id = ?");
+						preparedStatement2 = connection.prepareStatement("Update TRANSACTION set fine = ?, return_date = ? where book_id = ? and user_id = ?");
 						preparedStatement2.setString(1, s);
-						preparedStatement2.setString(2, transaction.getBookId());
-						preparedStatement2.setString(3,transaction.getUserId());
+						preparedStatement2.setString(2, transaction.getReturnDate());
+						preparedStatement2.setString(3, transaction.getBookId());
+						preparedStatement2.setString(4,transaction.getUserId());
 						int count1  = preparedStatement2.executeUpdate();
 						if(count1 >0){
 							status = true;
