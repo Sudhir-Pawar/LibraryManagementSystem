@@ -125,8 +125,9 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 			if(isPresent("Book_id", transaction.getBookId(),"Book")){
 				
 				if(isPresent("User_id", transaction.getUserId(), "Users")){
-					
-					if(!isPresent("Book_id",transaction.getBookId(), "TRANSACTION")){
+					preparedStatement = connection.prepareStatement("select * from transaction where book_id = ? and return_date is  null");
+					preparedStatement.setString(1, transaction.getBookId());
+					if(!preparedStatement.executeQuery().isBeforeFirst()){
 						preparedStatement = connection.prepareStatement("insert into TRANSACTION(BOOK_ID,USER_ID,issue_date) VALUES(?,?,TO_DATE(?,'YYYY-MM-DD'))");
 						preparedStatement.setString(1,transaction.getBookId());
 						preparedStatement.setString(2, transaction.getUserId());
@@ -136,10 +137,11 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 							status = true;
 						}	
 					} else {
-						// Raise Exception Book_id already present in Transaction table or Book already issued
+						System.out.println("Book already issued");
+						// Raise Exception Book already issued
 					}
 				} else {
-					//Raise Exception USer_id Not present in USer Table
+					//Raise Exception USer_id Not present in USer Table 
 				}
 			} else {
 				//Raise Exception Book_id Not present in Book Table
