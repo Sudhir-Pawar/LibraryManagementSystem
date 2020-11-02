@@ -176,17 +176,19 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 	public Boolean returnBook(Transaction transaction) {
 		Boolean status = false;
 		connection = DatabaseConnection.getConnection();
-		PreparedStatement preparedStatement,preparedStatement2;
+		PreparedStatement preparedStatement;
 		
 		try {			
 					
-					if(!isPresent("Book_id",transaction.getBookId(), "TRANSACTION")){
+					if(isPresent("Book_id",transaction.getBookId(), "TRANSACTION")){
 						preparedStatement = connection.prepareStatement("SELECT issue_date from TRANSACTION where book_id = ? and user_id = ? ");
 						preparedStatement.setString(1, transaction.getBookId());
 						preparedStatement.setString(2,transaction.getUserId());
 						ResultSet rs = preparedStatement.executeQuery();
-												
-						Date issuedate = rs.getDate("issue_date");
+						Date issuedate = null;
+						if(rs.next()){
+							issuedate = rs.getDate("issue_date");
+						}
 						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 						Date returndate = format.parse(transaction.getReturnDate());
 						int daydiff = (int) ((returndate.getTime() - issuedate.getTime()) / (1000 * 60 * 60 * 24));	
@@ -196,13 +198,13 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 						} else {
 							fine = (daydiff-30)*2;
 						}
-						String s = String.valueOf(daydiff);
-						preparedStatement2 = connection.prepareStatement("Update TRANSACTION set fine = ?, return_date = ? where book_id = ? and user_id = ?");
-						preparedStatement2.setString(1, s);
-						preparedStatement2.setString(2, transaction.getReturnDate());
-						preparedStatement2.setString(3, transaction.getBookId());
-						preparedStatement2.setString(4,transaction.getUserId());
-						int count1  = preparedStatement2.executeUpdate();
+						System.out.println(fine+" "+transaction.getReturnDate());
+						preparedStatement = connection.prepareStatement("Update TRANSACTION set fine = ?, return_date = TO_DATE(?,'YYYY-MM-DD') where book_id = ? and user_id = ?");
+						preparedStatement.setInt(1, fine);
+						preparedStatement.setString(2, transaction.getReturnDate());
+						preparedStatement.setString(3, transaction.getBookId());
+						preparedStatement.setString(4,transaction.getUserId());
+						int count1  = preparedStatement.executeUpdate();
 						if(count1 >0){
 							status = true;
 							

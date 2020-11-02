@@ -46,8 +46,8 @@ public class DaoTest {
 //		assertEquals(false,new DaoClass().removeUser(new User("ST000122")));
 //		assertEquals(false,new DaoClass().addUser(new User("ST0003","Gaurav Kondhare","Computer","BE","B","8738263763")));
 		
-		assertEquals(false,new DaoClass().issueBook(new Transaction("BK0012","ST0001","2020-10-30")));
-		
+//		assertEquals(false,new DaoClass().issueBook(new Transaction("BK0012","ST0001","2020-10-30",false)));
+		assertEquals(true,new DaoClass().returnBook(new Transaction("BK0010", "ST1004", "2020-12-31",true)));
 //		assertEquals(true, new DaoClass().viewAllBooks());
 //		assertEquals(true, new DaoClass().viewAllBooks(new User("ST0002")));
 	}

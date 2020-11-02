@@ -6,13 +6,15 @@ public class Transaction{
 	
 	
 	
-	public Transaction(String bookId, String userId, String issueDate) {
+	public Transaction(String bookId, String userId, String date,boolean isReturndate) {
 		super();
 		this.bookId = bookId;
 		this.userId = userId;
-		this.issueDate = issueDate;
+		if(isReturndate) {
+			this.returnDate = date;
+		}
+		this.issueDate = date;
 	}
-
 
 	public Transaction(String bookId, String userId, String issueDate, String returnDate, int fine) {
 		super();
