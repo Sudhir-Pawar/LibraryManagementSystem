@@ -1,11 +1,13 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import bean.Book;
 import bean.Transaction;
@@ -14,7 +16,6 @@ import connection.DatabaseConnection;
 import exception.BookIdNotFoundException;
 import exception.DuplicateBookIdException;
 import exception.DuplicateUserIdException;
-import exception.InvalidFieldsException;
 import exception.UserIdNotFoundException;
 
 public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
@@ -175,29 +176,50 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 	public Boolean returnBook(Transaction transaction) {
 		Boolean status = false;
 		connection = DatabaseConnection.getConnection();
-		PreparedStatement preparedStatement;
+		PreparedStatement preparedStatement,preparedStatement2;
+		
 		try {			
 					
 					if(!isPresent("Book_id",transaction.getBookId(), "TRANSACTION")){
-						preparedStatement = connection.prepareStatement("update TRANSACTION set return_date = ? where book_id = ? and user_id = ? ");
-						preparedStatement.setString(1,transaction.getReturnDate());
-						preparedStatement.setString(2, transaction.getBookId());
-						preparedStatement.setString(3,transaction.getUserId());
-						int count  = preparedStatement.executeUpdate();
-						if(count >0){
+						preparedStatement = connection.prepareStatement("SELECT issue_date from TRANSACTION where book_id = ? and user_id = ? ");
+						preparedStatement.setString(1, transaction.getBookId());
+						preparedStatement.setString(2,transaction.getUserId());
+						ResultSet rs = preparedStatement.executeQuery();
+												
+						Date issuedate = rs.getDate("issue_date");
+						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+						Date returndate = format.parse(transaction.getReturnDate());
+						int daydiff = (int) ((returndate.getTime() - issuedate.getTime()) / (1000 * 60 * 60 * 24));	
+						int fine;
+						if(daydiff <= 0) {
+							 fine = 0;
+						} else {
+							fine = (daydiff-30)*2;
+						}
+						String s = String.valueOf(daydiff);
+						preparedStatement2 = connection.prepareStatement("Update TRANSACTION set fine = ? where book_id = ? and user_id = ?");
+						preparedStatement2.setString(1, s);
+						preparedStatement2.setString(2, transaction.getBookId());
+						preparedStatement2.setString(3,transaction.getUserId());
+						int count1  = preparedStatement2.executeUpdate();
+						if(count1 >0){
 							status = true;
 							
 					} else {
-						// Raise Exception Book_id already present in Transaction table or Book already returned.
+						// Raise Exception fine is already imposed in Transaction table.
 					}
-				
-			} 
+			} 		
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return status;
 		
 	}
+
+
 
 	@Override
 	public ArrayList<Book> viewAllBooks() {
@@ -239,5 +261,7 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 		}
 		return false;
 	}
+	
+	
 
 }
