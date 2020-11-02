@@ -100,10 +100,12 @@ public class AdminClass {
 		Book book;
 		ArrayList<Book> books = new DaoClass().viewAllBooks();
 		if(!books.isEmpty()){
-			System.out.println("----------------Books Avaiable----------------");
+			System.out.println("----------------------------Books Avaiable----------------------------");
+			System.out.printf("%-4s %-7s %-50s %-50s\n","Srno","Book ID","Book Names","Author Names");
 			for(int itr = 0;itr < books.size();itr++){
 				book = books.get(itr);
-				System.out.println(itr+1+" "+book.getBookName()+" "+book.getAuthorName());
+				System.out.printf("%-4s %-7s %-50s %-50s\n",itr+1,book.getBookId(),book.getBookName(),book.getAuthorName());
+//				System.out.println(itr+1+" "+book.getBookName()+" "+book.getAuthorName());
 			}
 			return;
 		}

@@ -2,7 +2,6 @@ package main;
 
 import java.util.Scanner;
 
-import exception.InvalidFieldsException;
 
 public class MainClass {
 	public static void main(String [] args){
