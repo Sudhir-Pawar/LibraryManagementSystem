@@ -2,6 +2,8 @@ package main;
 
 import java.util.Scanner;
 
+import exception.InvalidFieldsException;
+
 public class MainClass {
 	public static void main(String [] args){
 		Scanner scanner = new Scanner(System.in);
@@ -13,50 +15,61 @@ public class MainClass {
 			choiceMain = scanner.nextInt();
 			switch(choiceMain){
 				case 1:{
-					String continueAdmin = null;
+					boolean continueAdmin = true;
 					int choiceAdmin;
 					do {
 						System.out.println("-----------------------ADMIN-----------------------");
-						System.out.println("1. Add user\n2. Remove user\n3. Add book\n4. Remove book\n5. View All books");
+						System.out.println("1. Add user\n2. Remove user\n3. Add book\n4. Remove book\n5. View All books\n6. Exit");
 						System.out.println("Enter your choice: ");
 						choiceAdmin = scanner.nextInt();
 						switch(choiceAdmin){
-							case 1:{
-								System.out.println("Add user");
+							case 1:{			
+								if(AdminClass.addUser()){
+									System.out.println("User Added");
+								}
 								break;
 							}
 							case 2:{
-								System.out.println("Remove user");
+								if(AdminClass.removeUser()){
+									System.out.println("User Removed");
+								}
 								break;
 							}
 							case 3:{
-								System.out.println("Add book");
+								if(AdminClass.addBook()){
+									System.out.println("Book Added");
+								}
 								break;
 							}
 							case 4:{
-								System.out.println("Remove book");
+								if(AdminClass.removeBook()){
+									System.out.println("Book removed");
+								}
 								break;
 							}
 							case 5:{
-								System.out.println("View All books");
+								AdminClass.viewAllBooks();
+								break;
+							}
+							case 6:{
+								continueAdmin  = false;
 								break;
 							}
 							default:{
-								System.out.println("Invalid chocie.");
+								System.out.println("Invalid choice.");
 								break;
 							}
 						}
-					System.out.println("Do you want to continue(Y/n): ");
-					continueAdmin = scanner.next();
-					}while(continueAdmin.equalsIgnoreCase("Y"));
+					
+					}while(continueAdmin);
 					break;
 				}
 				case 2:{
-					String continueUser = null;
+					boolean continueUser = true;
 					int choiceUser;
 					do{
 						System.out.println("-----------------------USER-----------------------");
-						System.out.println("1. Issue Book\n2. Return Book\n3. View issued books\n4. View All books");
+						System.out.println("1. Issue Book\n2. Return Book\n3. View issued books\n4. View All books\n5. Exit");
 						System.out.println("Enter your choice: ");
 						choiceUser = scanner.nextInt();
 						switch(choiceUser){
@@ -76,14 +89,16 @@ public class MainClass {
 								System.out.println("View All books");
 								break;
 							}
+							case 5:{
+								continueUser = false;
+								break;
+							}
 							default:{
 								System.out.println("Invalid Choice");
 								break;
 							}
 						}
-						System.out.println("Do you want to continue(Y/N): ");
-						continueUser = scanner.next();
-					}while(continueUser.equalsIgnoreCase("Y"));
+					}while(continueUser);
 					break;
 				}
 				case 3:{
