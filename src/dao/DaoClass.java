@@ -11,11 +11,16 @@ import bean.Book;
 import bean.Transaction;
 import bean.User;
 import connection.DatabaseConnection;
+import exception.BookIdNotFoundException;
+import exception.DuplicateBookIdException;
+import exception.DuplicateUserIdException;
+import exception.InvalidFieldsException;
+import exception.UserIdNotFoundException;
 
 public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 	Connection connection = null;
 	@Override
-	public Boolean insertBook(Book book) {
+	public Boolean insertBook(Book book){
 		Boolean status = false;
 		connection = DatabaseConnection.getConnection();
 		PreparedStatement preparedStatement;
@@ -31,8 +36,11 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 				}
 			}else{
 				//Raise Exception: bookId already exists. 
+				throw new DuplicateBookIdException();
 			}
-		} catch (SQLException e) {
+		}catch(DuplicateBookIdException e){
+			System.out.println(e.getMessage());
+		}catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return status;
@@ -53,6 +61,7 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 				}
 			}else{
 				//Raise Exception: BookId cannot be delete as already being used in transction data.;
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -81,10 +90,12 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 				if(count > 0){
 					status = true;
 				}
-			}else{
-				System.out.println("userId already exists.");
+			} else {	
 				//Raise Exception: userId already exists. 
+				throw new DuplicateUserIdException();
 			}
+		} catch(DuplicateUserIdException e) {
+			System.out.println(e.getMessage());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -143,11 +154,18 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 					}
 				} else {
 					//Raise Exception USer_id Not present in USer Table 
+					throw new UserIdNotFoundException(transaction.getUserId());
 				}
 			} else {
 				//Raise Exception Book_id Not present in Book Table
+				throw new BookIdNotFoundException(transaction.getBookId());
 			}
-		} catch (SQLException e) {
+		}catch(BookIdNotFoundException e){
+			System.out.println(e.getMessage());
+		} catch(UserIdNotFoundException e){
+			System.out.println(e.getMessage());
+		}
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return status;
@@ -193,7 +211,6 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println(books);
 		return books;
 	}
 	@Override
@@ -211,7 +228,6 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println(books);
 		return books;
 	}
 	private Boolean isPresent(String fieldName,String fieldValue,String tableName) throws SQLException{
