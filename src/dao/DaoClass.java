@@ -13,9 +13,11 @@ import bean.Book;
 import bean.Transaction;
 import bean.User;
 import connection.DatabaseConnection;
+import exception.BookAlreadyIssuedException;
 import exception.BookIdNotFoundException;
 import exception.DuplicateBookIdException;
 import exception.DuplicateUserIdException;
+import exception.UnsupportedDeleteException;
 import exception.UserIdNotFoundException;
 
 public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
@@ -62,8 +64,10 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 				}
 			}else{
 				//Raise Exception: BookId cannot be delete as already being used in transction data.;
-				
+				throw new UnsupportedDeleteException();
 			}
+		}catch(UnsupportedDeleteException e){
+			System.out.println(e.getMessage());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -118,9 +122,11 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 					status = true;
 				}
 			}else{
-				System.out.println("cannot be deleted as already being used in transction data.");
-				//Raise Exception: UserId cannot be deleted as already being used in transction data.;
+				//Raise Exception: Record linked to Transaction table
+				throw new UnsupportedDeleteException();
 			}
+		}catch(UnsupportedDeleteException e){
+			System.out.println(e.getMessage());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -152,6 +158,7 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 					} else {
 						System.out.println("Book already issued");
 						// Raise Exception Book already issued
+						throw new BookAlreadyIssuedException();
 					}
 				} else {
 					//Raise Exception USer_id Not present in USer Table 
@@ -161,14 +168,15 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 				//Raise Exception Book_id Not present in Book Table
 				throw new BookIdNotFoundException(transaction.getBookId());
 			}
-		}catch(BookIdNotFoundException e){
+		} catch (BookAlreadyIssuedException e) {
 			System.out.println(e.getMessage());
-		} catch(UserIdNotFoundException e){
+		} catch(BookIdNotFoundException e) {
 			System.out.println(e.getMessage());
-		}
-		catch (SQLException e) {
+		} catch(UserIdNotFoundException e) {
+			System.out.println(e.getMessage());
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		} 
 		return status;
 	}
 
