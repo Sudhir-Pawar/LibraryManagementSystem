@@ -9,7 +9,7 @@ public interface DaoInterface <T,P,S,R>{
 	T removeUser(S s);
 	T issueBook(R r);
 	T returnBook(R r);
-	//ArrayList<T> pendingReturn();
+	ArrayList<P> pendingReturn();
 	ArrayList<P> viewAllBooks(S s);
 	ArrayList<P> viewAllBooks();
 }

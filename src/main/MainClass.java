@@ -73,19 +73,23 @@ public class MainClass {
 						choiceUser = scanner.nextInt();
 						switch(choiceUser){
 							case 1:{
-								System.out.println("Issue Book");
+								if(UserClass.issueBook()){
+									System.out.println("Book Issed");
+								}
 								break;
 							}
 							case 2:{
-								System.out.println("Return Book");
+								if(UserClass.returnBook()){
+									System.out.println("Book Returned");
+								}
 								break;
 							}
 							case 3:{
-								System.out.println("View Issued books");
+								UserClass.pendingReturn();
 								break;
 							}
 							case 4:{
-								System.out.println("View All books");
+								UserClass.viewAllBooks();
 								break;
 							}
 							case 5:{
