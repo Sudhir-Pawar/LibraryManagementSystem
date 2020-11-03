@@ -18,7 +18,7 @@ public class MainClass {
 					int choiceAdmin;
 					do {
 						System.out.println("-----------------------ADMIN-----------------------");
-						System.out.println("1. Add user\n2. Remove user\n3. Add book\n4. Remove book\n5. View All books\n6. Exit");
+						System.out.println("1. Add user\n2. Remove user\n3. Add book\n4. Remove book\n5. View All books\n6. View All Issued Books\n7. Exit");
 						System.out.println("Enter your choice: ");
 						choiceAdmin = scanner.nextInt();
 						switch(choiceAdmin){
@@ -51,6 +51,10 @@ public class MainClass {
 								break;
 							}
 							case 6:{
+								AdminClass.pendingReturn();
+								break;
+							}
+							case 7:{
 								continueAdmin  = false;
 								break;
 							}
