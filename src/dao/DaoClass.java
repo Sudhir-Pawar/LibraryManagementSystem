@@ -271,7 +271,7 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 		connection = DatabaseConnection.getConnection();
 		ArrayList<Book> books = new ArrayList<>();
 		try {
-			ResultSet resultSet = connection.prepareStatement("select Book.book_id, Book.book_name, Book.book_author from Book inner join Transaction on Book.book_id = Transaction.book_id").executeQuery();
+			ResultSet resultSet = connection.prepareStatement("select Book.book_id, Book.book_name, Book.book_author from Book inner join Transaction on (Book.book_id = Transaction.book_id) where return_date IS NULL").executeQuery();
 				while(resultSet.next()){
 					books.add(new Book(resultSet.getString(1),resultSet.getString(2),resultSet.getString(3)));
 				}
