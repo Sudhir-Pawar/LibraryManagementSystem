@@ -26,7 +26,6 @@ public class AdminClass {
 		String division = bufferedReader.readLine();
 		System.out.println("Enter Contact number: ");
 		String contactNo = bufferedReader.readLine();
-		System.out.println(userId+" "+username);
 		String inValidFieldsValidator = Validator.isValidUser(userId, department, year, division, contactNo);
 		if(inValidFieldsValidator.isEmpty()){
 			return new DaoClass().addUser(new User(userId,username,department,year,division,contactNo));			
