@@ -288,6 +288,24 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 		}
 		return books;
 	}
+
+	@Override
+	public ArrayList<Book> userPendingBooks(User user) {
+		connection = DatabaseConnection.getConnection();
+		PreparedStatement preparedStatement;
+		ArrayList<Book> books = new ArrayList<>();
+		try {
+			preparedStatement = connection.prepareStatement("select Book.book_id, Book.book_name, Book.author_name from Book inner join Transaction on (Book.book_id = Transaction.book_id) where return_date IS NULL and user_id = ?");
+			preparedStatement.setString(1, user.getUserId());
+			ResultSet resultSet = preparedStatement.executeQuery();
+				while(resultSet.next()){
+					books.add(new Book(resultSet.getString(1),resultSet.getString(2),resultSet.getString(3)));
+				}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return books;
+	}
 	
 	
 

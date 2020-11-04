@@ -80,19 +80,33 @@ public class UserClass{
 		System.out.println("No records found.");
 	}
 	
-	public static void pendingReturn() {
+	public static void userPendingBooks() {
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 		Book book;
-		ArrayList<Book> books = new DaoClass().pendingReturn();
-		if(!books.isEmpty()){
-			System.out.println("----------------------------All Issued Books----------------------------");
-			System.out.printf("%-4s %-7s %-50s %-50s\n","Srno","Book ID","Book Names","Author Names");
-			for(int itr = 0;itr < books.size();itr++){
-				book = books.get(itr);
-				System.out.printf("%-4s %-7s %-50s %-50s\n",itr+1,book.getBookId(),book.getBookName(),book.getAuthorName());
-//				System.out.println(itr+1+" "+book.getBookName()+" "+book.getAuthorName());
-			}
-			return;
+
+		try {
+			System.out.println("Enter the User ID(eg ST0015): ");
+			String userId;
+			userId = bufferedReader.readLine();
+			ArrayList<Book> books = new DaoClass().userPendingBooks(new User(userId));
+		
+			if(!books.isEmpty()){
+				System.out.println("----------------------------Pending Books----------------------------");
+				System.out.printf("%-4s %-7s %-50s %-50s\n","Srno","Book ID","Book Names","Author Names");
+				for(int itr = 0;itr < books.size();itr++){
+					book = books.get(itr);
+					System.out.printf("%-4s %-7s %-50s %-50s\n",itr+1,book.getBookId(),book.getBookName(),book.getAuthorName());
+//					System.out.println(itr+1+" "+book.getBookName()+" "+book.getAuthorName());
+				}
+				return;
 		}
-		System.out.println("No records found.");
-	}
+	} 	catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+			System.out.println("No records found.");
+		}
+		 
+	
 }
