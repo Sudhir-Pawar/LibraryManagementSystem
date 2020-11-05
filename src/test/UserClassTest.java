@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import org.junit.AfterClass;
@@ -26,17 +27,17 @@ public class UserClassTest{
 	
 	@Test
 	public void issueBook() {
-		String bookInputs = "BK0016"+"/"+"ST0021"+"/"+"2020-02-24";
+		String bookInputs = "BK0015"+"/"+"ST0002"+"/"+"2020-02-24";
 		bookInputs = bookInputs.replaceAll("/", System.getProperty("line.separator"));
 		System.setIn(new ByteArrayInputStream(bookInputs.getBytes()));
 		assertEquals("Should issue the book to the user. ",true,UserClass.issueBook());
 		
-		bookInputs = "BK0016"+"/"+"ST0010"+"/"+"2020-01-24";
+		bookInputs = "BK0015"+"/"+"ST0010"+"/"+"2020-01-24";
 		bookInputs = bookInputs.replaceAll("/", System.getProperty("line.separator"));
 		System.setIn(new ByteArrayInputStream(bookInputs.getBytes()));
 		assertEquals("Print messange Book already issued. ",false,UserClass.issueBook());
 		
-		bookInputs = "BK0046"+"/"+"ST0045"+"/"+"13/02/2020";
+		bookInputs = "BK0007"+"/"+"ST0003"+"/"+"13/02/2020";
 		bookInputs = bookInputs.replaceAll("/", System.getProperty("line.separator"));
 		System.setIn(new ByteArrayInputStream(bookInputs.getBytes()));
 		assertEquals("Date not entered in proper format. Invalid Field issueDate. ",false,UserClass.issueBook());
@@ -44,17 +45,17 @@ public class UserClassTest{
 	
 	@Test
 	public void returnBook() {
-		String bookInputs = "BK0016"+"/"+"ST0021"+"/"+"2020-02-24";
+		String bookInputs = "BK0014"+"/"+"ST0002"+"/"+"2020-12-25";
 		bookInputs = bookInputs.replaceAll("/", System.getProperty("line.separator"));
 		System.setIn(new ByteArrayInputStream(bookInputs.getBytes()));
-		assertEquals("Should return the book to the Books table. ",true,UserClass.issueBook());
+		assertEquals("Should return the book to the Books table. ",true,UserClass.returnBook());
 		
-		bookInputs = "BK0016"+"/"+"ST0010"+"/"+"2020-01-24";
+		bookInputs = "BK0015"+"/"+"ST1002"+"/"+"2020-01-24";
 		bookInputs = bookInputs.replaceAll("/", System.getProperty("line.separator"));
 		System.setIn(new ByteArrayInputStream(bookInputs.getBytes()));
-		assertEquals("Print messange Book already returned. ",false,UserClass.issueBook());
+		assertEquals("Print messange Book already returned. ",false,UserClass.returnBook());
 		
-		bookInputs = "BK0046"+"/"+"ST0045"+"/"+"13/02/2020";
+		bookInputs = "BK0012"+"/"+"ST0001"+"/"+"13/02/2020";
 		bookInputs = bookInputs.replaceAll("/", System.getProperty("line.separator"));
 		System.setIn(new ByteArrayInputStream(bookInputs.getBytes()));
 		assertEquals("Date not entered in proper format. Invalid Field returnDate. ",false,UserClass.returnBook());
@@ -88,7 +89,6 @@ public class UserClassTest{
 		} else {
 			testStatus = false;
 			assertEquals("Should print message no books issued.", true,testStatus);
-
 		}
 	}
 }
