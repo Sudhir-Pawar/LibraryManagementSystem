@@ -221,18 +221,21 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 						if(count1 >0){
 							status = true;
 							
-					} else {
-						// Raise Exception fine is already imposed in Transaction table.
 					}
-			} 		
+			}  else {
+				// Raise Exception fine is already imposed in Transaction table.
+				throw new BookIdNotFoundException(transaction.getBookId());
+			}		
+		} catch(BookIdNotFoundException e) {
+			System.out.println(e.getMessage());
+		} catch (NoBookIssuedException e) {
+			System.out.println(e.getMessage());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (NoBookIssuedException e) {
-			System.out.println(e.getMessage());
-		}
+		} 
 		return status;
 		
 	}
