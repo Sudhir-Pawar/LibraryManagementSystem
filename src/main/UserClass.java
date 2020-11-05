@@ -50,8 +50,14 @@ public class UserClass{
 		try {
 			System.out.println("Enter the book ID(eg BK0014): ");
 			String bookId = bufferedReader.readLine();
+			if(!Validator.isValidBookId(bookId)){
+				throw new InvalidFieldsException("BookId");
+			}
 			System.out.println("Enter the User ID(eg ST0015): ");
 			String userId = bufferedReader.readLine();
+			if(!Validator.isValidUserId(userId)) {
+				throw new InvalidFieldsException("UserId");
+			}
 			System.out.println("Enter the return Date(eg 2020-03-23)");
 			String returnDate = bufferedReader.readLine();
 			if(!Validator.isValidDate(returnDate)){
@@ -95,6 +101,9 @@ public class UserClass{
 			System.out.println("Enter the User ID(eg ST0015): ");
 			String userId;
 			userId = bufferedReader.readLine();
+			if(!Validator.isValidUserId(userId)) {
+				throw new InvalidFieldsException("UserId");
+			}
 			ArrayList<Book> books = new DaoClass().userPendingBooks(new User(userId));
 		
 			if(!books.isEmpty()){
@@ -110,7 +119,10 @@ public class UserClass{
 	} 	catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} catch (InvalidFieldsException e) {
+			System.out.println(e.getMessage());;
+
+	}
 		
 			System.out.println("No records found.");
 		}

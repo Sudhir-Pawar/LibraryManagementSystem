@@ -195,7 +195,7 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 						preparedStatement.setString(2,transaction.getUserId());
 						ResultSet rs = preparedStatement.executeQuery();
 						Date issuedate = null;
-						if(rs.next() == false) {
+						if(!rs.isBeforeFirst()) {
 							//raise exception that no book has been issued to the user
 							throw  new NoBookIssuedException();
 						}
