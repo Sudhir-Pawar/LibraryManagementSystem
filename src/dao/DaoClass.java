@@ -17,6 +17,7 @@ import exception.BookAlreadyIssuedException;
 import exception.BookIdNotFoundException;
 import exception.DuplicateBookIdException;
 import exception.DuplicateUserIdException;
+import exception.NoBookIssuedException;
 import exception.UnsupportedDeleteException;
 import exception.UserIdNotFoundException;
 
@@ -194,6 +195,10 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 						preparedStatement.setString(2,transaction.getUserId());
 						ResultSet rs = preparedStatement.executeQuery();
 						Date issuedate = null;
+						if(rs.next() == false) {
+							//raise exception that no book has been issued to the user
+							throw  new NoBookIssuedException();
+						}
 						if(rs.next()){
 							issuedate = rs.getDate("issue_date");
 						}
@@ -225,6 +230,8 @@ public class DaoClass implements DaoInterface<Boolean,Book,User,Transaction>{
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (NoBookIssuedException e) {
+			System.out.println(e.getMessage());
 		}
 		return status;
 		

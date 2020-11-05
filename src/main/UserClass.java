@@ -18,8 +18,14 @@ public class UserClass{
 		try {
 			System.out.println("Enter the book ID(eg BK0014): ");
 			String bookId = bufferedReader.readLine();
+			if(!Validator.isValidBookId(bookId)){
+				throw new InvalidFieldsException("BookId");
+			}
 			System.out.println("Enter the User ID(eg ST0015): ");
 			String userId = bufferedReader.readLine();
+			if(!Validator.isValidUserId(userId)) {
+				throw new InvalidFieldsException("UserId");
+			}
 			System.out.println("Enter the issue Date(eg 2020-03-23)");
 			String issueDate = bufferedReader.readLine();
 			if(!Validator.isValidDate(issueDate)){
@@ -31,8 +37,9 @@ public class UserClass{
 			e.printStackTrace();
 		} catch (InvalidFieldsException e) {
 			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());;
-		}
+			System.out.println(e.getMessage());
+		} 
+		
 		return false;
 				
 	}
