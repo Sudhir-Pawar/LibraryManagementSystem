@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import org.junit.AfterClass;
@@ -11,17 +12,29 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import bean.Book;
+import connection.DatabaseConnection;
 import dao.DaoClass;
 import main.AdminClass;
 
 public class AdminClassTest {
 	InputStream inputStream;
+	static Connection connection;
+	static{
+		connection = new DatabaseConnection().getConnection();
+	}
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+//		System.out.println("before ");
+		connection.prepareStatement("insert into TRANSACTION(BOOK_ID,USER_ID,issue_date) VALUES('BK0008','ST0001',TO_DATE('2020-10-31','YYYY-MM-DD'))").executeUpdate();
+		
 	}
+	
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
+//		System.out.println("after");
+		connection.prepareStatement("delete from transaction where BOOK_ID = 'BK0008' and user_id='ST0001'").executeUpdate();
+		
 	}
 
 	@Test
@@ -91,7 +104,7 @@ public class AdminClassTest {
 		System.setIn(new ByteArrayInputStream(bookId.getBytes()));
 		assertEquals("Should print message Connot remove book. Invalid fields bookId.",false, AdminClass.removeBook());
 		
-		bookId = "BK0007";
+		bookId = "BK0008";
 		System.setIn(new ByteArrayInputStream(bookId.getBytes()));
 		assertEquals("Should not remove book from BOOK table. Print message Unsupported Delete: Record linked to Transaction table.",false, AdminClass.removeBook());
 		

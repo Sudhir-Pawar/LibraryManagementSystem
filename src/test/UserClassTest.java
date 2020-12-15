@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
@@ -12,17 +13,23 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import bean.Book;
+import connection.DatabaseConnection;
 import dao.DaoClass;
 import main.UserClass;
 
 public class UserClassTest{
 	InputStream inputStream;
+	static Connection connection;
+	static{
+		connection = new DatabaseConnection().getConnection();
+	}
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
+		connection.prepareStatement("delete from transaction where BOOK_ID = 'BK0015' and user_id='ST0002'").executeUpdate();
 	}
 	
 	@Test
@@ -45,7 +52,7 @@ public class UserClassTest{
 	
 	@Test
 	public void returnBook() {
-		String bookInputs = "BK0014"+"/"+"ST0002"+"/"+"2020-12-25";
+		String bookInputs = "BK0015"+"/"+"ST0002"+"/"+"2020-12-25";
 		bookInputs = bookInputs.replaceAll("/", System.getProperty("line.separator"));
 		System.setIn(new ByteArrayInputStream(bookInputs.getBytes()));
 		assertEquals("Should return the book to the Books table. ",true,UserClass.returnBook());
