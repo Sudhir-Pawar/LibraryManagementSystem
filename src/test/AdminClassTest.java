@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.junit.AfterClass;
@@ -19,6 +21,7 @@ import main.AdminClass;
 public class AdminClassTest {
 	InputStream inputStream;
 	static Connection connection;
+	static ResultSet books, pendingReturns;
 	static{
 		connection = new DatabaseConnection().getConnection();
 	}
@@ -26,6 +29,8 @@ public class AdminClassTest {
 	public static void setUpBeforeClass() throws Exception {
 //		System.out.println("before ");
 		connection.prepareStatement("insert into TRANSACTION(BOOK_ID,USER_ID,issue_date) VALUES('BK0008','ST0001',TO_DATE('2020-10-31','YYYY-MM-DD'))").executeUpdate();
+		books  = connection.prepareStatement("select * from book").executeQuery();
+		pendingReturns = connection.prepareStatement("select Book.book_id, Book.book_name, Book.author_name from Book inner join Transaction on (Book.book_id = Transaction.book_id) where return_date IS NULL").executeQuery();
 		
 	}
 	
@@ -112,28 +117,24 @@ public class AdminClassTest {
 
 	@Test
 	public void testViewAllBooks() {
-		boolean testStatus = true;
-		AdminClass.viewAllBooks();
-		ArrayList<Book> books = new DaoClass().viewAllBooks();
-		if(!books.isEmpty()){
-			assertEquals("Should print all books details.",true, testStatus);
-		} else {
-			testStatus = false;
-			assertEquals("Should print message no record found.", true,testStatus);
-		}
+		try {
+			boolean testStatus = !new DaoClass().viewAllBooks().isEmpty();
+			boolean containsBooks = books.isBeforeFirst();
+			assertEquals("Should print all books details if present.",containsBooks,testStatus);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
 		
 	}
 //
 	@Test
 	public void testPendingReturn() {
-		boolean testStatus = true;
-		AdminClass.pendingReturn();
-		ArrayList<Book> books = new DaoClass().pendingReturn();
-		if(!books.isEmpty()){
-			assertEquals("Should print all issued books details.",true, testStatus);
-		} else {
-			testStatus = false;
-			assertEquals("Should print message no record found.", true,testStatus);
+		try {
+			boolean testStatus = !new DaoClass().pendingReturn().isEmpty();
+			boolean containsPendingReturn= pendingReturns.isBeforeFirst();
+			assertEquals("Should print all issued books details if present.",containsPendingReturn, testStatus);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 

@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.junit.AfterClass;
@@ -13,6 +14,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import bean.Book;
+import bean.User;
 import connection.DatabaseConnection;
 import dao.DaoClass;
 import main.UserClass;
@@ -20,11 +22,14 @@ import main.UserClass;
 public class UserClassTest{
 	InputStream inputStream;
 	static Connection connection;
+	static ResultSet books, userPendingReturns;
 	static{
 		connection = new DatabaseConnection().getConnection();
 	}
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+		books  = connection.prepareStatement("select * from book").executeQuery();
+		userPendingReturns = connection.prepareStatement("select Book.book_id, Book.book_name, Book.author_name from Book inner join Transaction on (Book.book_id = Transaction.book_id) where return_date IS NULL and user_id = 'ST0001'").executeQuery();
 	}
 
 	@AfterClass
@@ -71,31 +76,28 @@ public class UserClassTest{
 	
 	@Test
 	public void testViewAllBooks() {
-		boolean testStatus = true;
-		UserClass.viewAllBooks();
-		ArrayList<Book> books = new DaoClass().viewAllBooks();
-		if(!books.isEmpty()){
-			assertEquals("Should print all books details.",true, testStatus);
-		} else {
-			testStatus = false;
-			assertEquals("Should print message no record found.", true,testStatus);
+		try {
+			boolean testStatus = !new DaoClass().viewAllBooks().isEmpty();
+			System.out.println("IsEmpty : "+testStatus);
+			boolean containsBooks = books.isBeforeFirst();
+			assertEquals("Should print all books details.",containsBooks, testStatus);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+	
+		
 		
 	}
 	
 	@Test
 	public void userPendingBooks() {
-		boolean testStatus = true;
-		String bookInputs = "ST0014";
-		bookInputs = bookInputs.replaceAll("/", System.getProperty("line.separator"));
-		System.setIn(new ByteArrayInputStream(bookInputs.getBytes()));
-		UserClass.userPendingBooks();
-		ArrayList<Book> books = new DaoClass().viewAllBooks();
-		if(!books.isEmpty()){
-			assertEquals("Should print all the issued books details.",true, testStatus);
-		} else {
-			testStatus = false;
-			assertEquals("Should print message no books issued.", true,testStatus);
+		try {
+			boolean testStatus = !new DaoClass().userPendingBooks(new User("ST0001")).isEmpty();
+			System.out.println("IsEmpty : "+testStatus);
+			boolean containsBooks = userPendingReturns.isBeforeFirst();
+			assertEquals("Should print all books details.",containsBooks, testStatus);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 }
